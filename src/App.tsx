@@ -1,17 +1,5 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
+import { useState } from "react";
 import { motion } from "motion/react";
-import { 
-  Science, 
-  Visibility, 
-  Layers, 
-  AutoAwesome, 
-  Terminal, 
-  DataObject 
-} from "@mui/icons-material"; // Wait, I should use lucide-react as per guidelines
 import { 
   Beaker, 
   Eye, 
@@ -21,6 +9,7 @@ import {
   Code2,
   ChevronRight
 } from "lucide-react";
+import { translations } from "./translations";
 
 const IMAGES = {
   hero: "https://lh3.googleusercontent.com/aida-public/AB6AXuCiTVrA8Xdvfg5JAEkYlOgOyGneIrs-dH1ClAzMtMbzUwsBpBeS8RFa1pfXatuzYcNo3Kh1yVtdbduUuk0yX_4q1nGBdOkAFQHYIDtZZmrEDsyTl9fcA0chtxHmh1SYf4uVfOeeHqtdLNKoXDFf7Il8-S0_mooLXav4cWqlp8B5ZvOLoAufy2WkRtcVpt8Bh0Tem8xh0tMns6W7ndLSdUnrIXHxjrSbep9sEWWtSpsBiSZl6_ugubL9hwSlObH2z5X-ZPvJeuJ5ovg",
@@ -31,6 +20,11 @@ const IMAGES = {
 };
 
 export default function App() {
+  const [lang, setLang] = useState<"en" | "ru">("en");
+  const t = translations[lang];
+
+  const toggleLang = () => setLang(prev => prev === "en" ? "ru" : "en");
+
   return (
     <div className="min-h-screen">
       {/* Header */}
@@ -38,14 +32,24 @@ export default function App() {
         <nav className="flex justify-between items-center px-6 md:px-8 py-4 max-w-screen-2xl mx-auto">
           <div className="text-xl md:text-2xl font-black text-on-surface tracking-tighter font-headline">The Lab.js</div>
           <div className="hidden md:flex items-center gap-8">
-            <a className="font-headline tracking-tight text-sm uppercase text-primary border-b-2 border-primary pb-1" href="#">The Syllabus</a>
-            <a className="font-headline tracking-tight text-sm uppercase text-on-surface/70 hover:text-on-surface nav-link-effect" href="#">Lab Notes</a>
-            <a className="font-headline tracking-tight text-sm uppercase text-on-surface/70 hover:text-on-surface nav-link-effect" href="#">Specimens</a>
-            <a className="font-headline tracking-tight text-sm uppercase text-on-surface/70 hover:text-on-surface nav-link-effect" href="#">Join the Cohort</a>
+            <a className="font-headline tracking-tight text-sm uppercase text-primary border-b-2 border-primary pb-1" href="#">{t.nav.syllabus}</a>
+            <a className="font-headline tracking-tight text-sm uppercase text-on-surface/70 hover:text-on-surface nav-link-effect" href="#">{t.nav.notes}</a>
+            <a className="font-headline tracking-tight text-sm uppercase text-on-surface/70 hover:text-on-surface nav-link-effect" href="#">{t.nav.specimens}</a>
+            <a className="font-headline tracking-tight text-sm uppercase text-on-surface/70 hover:text-on-surface nav-link-effect" href="#">{t.nav.join}</a>
           </div>
-          <button className="bg-primary-container text-on-primary-container px-4 md:px-6 py-2 rounded-lg font-headline font-bold text-xs md:text-sm uppercase tracking-wider shadow-[0_0_15px_rgba(183,159,255,0.3)] active:scale-95 transition-all duration-200 hover:brightness-110">
-            Start Experiment
-          </button>
+          <div className="flex items-center gap-4">
+            <button className="bg-primary-container text-on-primary-container px-4 md:px-6 py-2 rounded-lg font-headline font-bold text-xs md:text-sm uppercase tracking-wider shadow-[0_0_15px_rgba(183,159,255,0.3)] active:scale-95 transition-all duration-200 hover:brightness-110 min-w-[140px] md:min-w-[180px]">
+              {t.nav.start}
+            </button>
+            <button 
+              onClick={toggleLang}
+              className="flex items-center justify-center gap-2 w-[80px] py-2 rounded-lg bg-surface-container-high border border-outline-variant hover:border-primary transition-all text-xs font-mono uppercase tracking-widest"
+              title={lang === "en" ? "Switch to Russian" : "Переключить на английский"}
+            >
+              <span className="text-base leading-none">{lang === "en" ? "🇺🇸" : "🇷🇺"}</span>
+              <span>{lang === "en" ? "EN" : "RU"}</span>
+            </button>
+          </div>
         </nav>
       </header>
 
@@ -62,20 +66,20 @@ export default function App() {
             <div className="flex-1 space-y-6 md:space-y-8 text-center md:text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high border border-primary/20">
                 <Beaker className="text-primary w-4 h-4" />
-                <span className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-primary">Cohort Alpha v2.0</span>
+                <span className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-primary">{t.hero.badge}</span>
               </div>
               <h1 className="text-5xl sm:text-6xl md:text-8xl font-headline font-black tracking-tighter leading-[0.9] text-on-surface glow-text">
-                Code Your First <br/><span className="text-primary-dim">Masterpiece.</span>
+                {t.hero.title} <br/><span className="text-primary-dim">{t.hero.titleAccent}</span>
               </h1>
               <p className="text-on-surface-variant text-lg md:text-xl max-w-xl mx-auto md:mx-0 font-light leading-relaxed">
-                Step into the digital sanctum where logic meets alchemy. Transmute raw syntax into living, breathing web experiences through our high-intensity JavaScript immersion.
+                {t.hero.description}
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
                 <button className="w-full sm:w-auto px-8 py-4 bg-primary-container text-on-primary-container rounded-xl font-headline font-bold uppercase tracking-widest text-sm shadow-[0_0_30px_rgba(183,159,255,0.4)] hover:shadow-[0_0_50px_rgba(183,159,255,0.5)] transition-all glow-pulse active:scale-95">
-                  Start Experiment
+                  {t.hero.ctaPrimary}
                 </button>
                 <button className="w-full sm:w-auto px-8 py-4 border border-primary/30 text-primary rounded-xl font-headline font-bold uppercase tracking-widest text-sm hover:bg-primary/5 transition-all active:scale-95">
-                  View Syllabus
+                  {t.hero.ctaSecondary}
                 </button>
               </div>
             </div>
@@ -95,8 +99,8 @@ export default function App() {
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute -bottom-4 md:-bottom-6 -left-4 md:-left-6 glass-card p-4 md:p-6 rounded-xl border-primary/20">
-                  <div className="font-mono text-[8px] md:text-[10px] text-primary uppercase mb-1 md:mb-2">Process Node</div>
-                  <div className="text-xl md:text-2xl font-headline font-bold text-on-surface">Alchemy v4.2</div>
+                  <div className="font-mono text-[8px] md:text-[10px] text-primary uppercase mb-1 md:mb-2">{t.hero.nodeLabel}</div>
+                  <div className="text-xl md:text-2xl font-headline font-bold text-on-surface">Alchemy v1.0.1</div>
                 </div>
               </motion.div>
             </div>
@@ -114,8 +118,8 @@ export default function App() {
                 viewport={{ once: true }}
                 className="space-y-6 text-center lg:text-left sm:col-span-2 lg:col-span-1 mb-8 lg:mb-0"
               >
-                <h2 className="text-3xl md:text-4xl font-headline font-bold text-on-surface">The Alchemist's<br/>Foundation</h2>
-                <p className="text-on-surface-variant font-light max-w-2xl mx-auto lg:mx-0">We don't teach frameworks. We teach the elemental forces that govern the digital realm.</p>
+                <h2 className="text-3xl md:text-4xl font-headline font-bold text-on-surface" dangerouslySetInnerHTML={{ __html: t.foundations.title.replace('Foundation', '<br/>Foundation') }}></h2>
+                <p className="text-on-surface-variant font-light max-w-2xl mx-auto lg:mx-0">{t.foundations.description}</p>
                 <div className="h-1 w-24 bg-primary/30 mx-auto lg:mx-0"></div>
               </motion.div>
 
@@ -130,9 +134,9 @@ export default function App() {
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
                   <Eye className="w-12 md:w-16 h-12 md:h-16 text-primary" />
                 </div>
-                <div className="text-primary font-mono text-xs md:text-sm tracking-widest uppercase">01. Logic Lens</div>
-                <h3 className="text-xl md:text-2xl font-headline font-bold">Seeing the Invisible</h3>
-                <p className="text-on-surface-variant text-sm leading-relaxed">Develop the cognitive ability to decompose complex problems into atomic, logical operations before a single line is written.</p>
+                <div className="text-primary font-mono text-xs md:text-sm tracking-widest uppercase">{t.foundations.card1.tag}</div>
+                <h3 className="text-xl md:text-2xl font-headline font-bold">{t.foundations.card1.title}</h3>
+                <p className="text-on-surface-variant text-sm leading-relaxed">{t.foundations.card1.desc}</p>
               </motion.div>
 
               {/* Card 2 */}
@@ -146,9 +150,9 @@ export default function App() {
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
                   <LayersIcon className="w-12 md:w-16 h-12 md:h-16 text-primary" />
                 </div>
-                <div className="text-primary font-mono text-xs md:text-sm tracking-widest uppercase">02. Syntax as Soil</div>
-                <h3 className="text-xl md:text-2xl font-headline font-bold">Deep Rooted Code</h3>
-                <p className="text-on-surface-variant text-sm leading-relaxed">Master the primitive architecture of JavaScript. Learn how memory, execution contexts, and closures create the fertile ground for apps.</p>
+                <div className="text-primary font-mono text-xs md:text-sm tracking-widest uppercase">{t.foundations.card2.tag}</div>
+                <h3 className="text-xl md:text-2xl font-headline font-bold">{t.foundations.card2.title}</h3>
+                <p className="text-on-surface-variant text-sm leading-relaxed">{t.foundations.card2.desc}</p>
               </motion.div>
 
               {/* Card 3 */}
@@ -162,9 +166,9 @@ export default function App() {
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
                   <Sparkles className="w-12 md:w-16 h-12 md:h-16 text-primary" />
                 </div>
-                <div className="text-primary font-mono text-xs md:text-sm tracking-widest uppercase">03. Digital Bloom</div>
-                <h3 className="text-xl md:text-2xl font-headline font-bold">Organic Emergence</h3>
-                <p className="text-on-surface-variant text-sm leading-relaxed">Orchestrate the final synthesis. Watch your logic blossom into high-fidelity user interfaces that feel alive and responsive.</p>
+                <div className="text-primary font-mono text-xs md:text-sm tracking-widest uppercase">{t.foundations.card3.tag}</div>
+                <h3 className="text-xl md:text-2xl font-headline font-bold">{t.foundations.card3.title}</h3>
+                <p className="text-on-surface-variant text-sm leading-relaxed">{t.foundations.card3.desc}</p>
               </motion.div>
             </div>
           </div>
@@ -180,20 +184,20 @@ export default function App() {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                <div className="text-primary font-mono text-xs md:text-sm uppercase tracking-[0.3em] mb-4">// Laboratory Results</div>
-                <h2 className="text-4xl md:text-5xl font-headline font-black text-on-surface tracking-tighter">Specimen Gallery</h2>
+                <div className="text-primary font-mono text-xs md:text-sm uppercase tracking-[0.3em] mb-4">{t.gallery.tag}</div>
+                <h2 className="text-4xl md:text-5xl font-headline font-black text-on-surface tracking-tighter">{t.gallery.title}</h2>
               </motion.div>
               <div className="text-on-surface-variant font-mono text-[10px] md:text-xs uppercase tracking-widest max-w-xs md:text-right">
-                Live observations from previous experiments in digital architecture.
+                {t.gallery.desc}
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
               {[
-                { img: IMAGES.specimen1, rotate: "-rotate-2", subject: "Fluid Dynamics v1", name: "Obsidian_Mist.js" },
-                { img: IMAGES.specimen2, rotate: "rotate-3", subject: "Neural Topology", name: "Synapse_Tree.css", mt: "lg:mt-20" },
-                { img: IMAGES.specimen3, rotate: "-rotate-1", subject: "Reactive Core", name: "Plasma_Engine.io" },
-                { img: IMAGES.specimen4, rotate: "rotate-6", subject: "Logic Gate Beta", name: "Alchemist_Shell.exe", mt: "lg:mt-12" }
+                { img: IMAGES.specimen1, rotate: "-rotate-2", subject: t.gallery.subjects.fluid, name: "Obsidian_Mist.js" },
+                { img: IMAGES.specimen2, rotate: "rotate-3", subject: t.gallery.subjects.neural, name: "Synapse_Tree.css", mt: "lg:mt-20" },
+                { img: IMAGES.specimen3, rotate: "-rotate-1", subject: t.gallery.subjects.reactive, name: "Plasma_Engine.io" },
+                { img: IMAGES.specimen4, rotate: "rotate-6", subject: t.gallery.subjects.logic, name: "Alchemist_Shell.exe", mt: "lg:mt-12" }
               ].map((specimen, idx) => (
                 <motion.div 
                   key={idx}
@@ -211,7 +215,7 @@ export default function App() {
                       referrerPolicy="no-referrer"
                     />
                   </div>
-                  <div className="font-mono text-[10px] text-outline tracking-tighter uppercase">Subject: {specimen.subject}</div>
+                  <div className="font-mono text-[10px] text-outline tracking-tighter uppercase">{lang === "en" ? "Subject" : "Предмет"}: {specimen.subject}</div>
                   <div className="text-on-surface text-sm font-bold mt-1">{specimen.name}</div>
                 </motion.div>
               ))}
@@ -230,40 +234,40 @@ export default function App() {
           >
             <div className="relative glass-card p-6 sm:p-12 rounded-3xl border-primary/30 shadow-[0_0_100px_rgba(157,123,255,0.1)]">
               <div className="absolute -top-4 md:-top-6 -right-4 md:-right-6 px-4 md:px-6 py-1 md:py-2 bg-primary text-on-primary-container font-mono text-[10px] md:text-sm font-bold rounded-lg shadow-lg rotate-12">
-                LIMITED SLOTS
+                {t.form.badge}
               </div>
               <div className="text-center mb-8 md:mb-12">
-                <h2 className="text-3xl md:text-4xl font-headline font-black text-on-surface uppercase tracking-widest mb-4 italic">The Lab Pass</h2>
+                <h2 className="text-3xl md:text-4xl font-headline font-black text-on-surface uppercase tracking-widest mb-4 italic">{t.form.title}</h2>
                 <div className="font-mono text-[10px] md:text-xs text-primary-dim uppercase tracking-widest border-y border-primary/20 py-2 inline-block">
-                  Application for Alchemy Cohort Alpha
+                  {t.form.subtitle}
                 </div>
               </div>
               <form className="space-y-6 md:space-y-8" onSubmit={(e) => e.preventDefault()}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                   <div className="space-y-2">
-                    <label className="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest">Alchemist Name</label>
+                    <label className="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest">{t.form.nameLabel}</label>
                     <input 
                       className="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-mono placeholder:text-outline-variant/50 transition-all text-sm md:text-base" 
-                      placeholder="EX: ARIC_VOLLMER" 
+                      placeholder={t.form.namePlaceholder} 
                       type="text"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest">Signal Channel (Email)</label>
+                    <label className="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest">{t.form.emailLabel}</label>
                     <input 
                       className="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-mono placeholder:text-outline-variant/50 transition-all text-sm md:text-base" 
-                      placeholder="CODE@THELAB.JS" 
+                      placeholder={t.form.emailPlaceholder} 
                       type="email"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest">Experience Index</label>
+                  <label className="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest">{t.form.expLabel}</label>
                   <div className="flex gap-3 md:gap-4 overflow-x-auto pb-2 scrollbar-hide">
-                    {["Novice", "Initiate", "Artisan", "Expert"].map((level) => (
+                    {t.form.expLevels.map((level) => (
                       <button 
                         key={level}
-                        className={`flex-shrink-0 px-4 py-2 border text-[10px] md:text-xs font-mono uppercase transition-all ${level === "Initiate" ? "bg-primary-container/20 border-primary text-primary" : "bg-surface-container-high border-outline-variant text-on-surface-variant hover:border-primary/50"}`} 
+                        className={`flex-shrink-0 px-4 py-2 border text-[10px] md:text-xs font-mono uppercase transition-all ${level === t.form.expLevels[1] ? "bg-primary-container/20 border-primary text-primary" : "bg-surface-container-high border-outline-variant text-on-surface-variant hover:border-primary/50"}`} 
                         type="button"
                       >
                         {level}
@@ -272,18 +276,18 @@ export default function App() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest">Manifesto / Intent</label>
+                  <label className="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest">{t.form.intentLabel}</label>
                   <textarea 
                     className="w-full bg-transparent border border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-mono placeholder:text-outline-variant/50 transition-all p-4 text-sm md:text-base" 
-                    placeholder="DESCRIBE YOUR DIGITAL AMBITIONS..." 
+                    placeholder={t.form.intentPlaceholder} 
                     rows={3}
                   ></textarea>
                 </div>
                 <div className="pt-4 md:pt-8 text-center">
                   <button className="w-full sm:w-auto group relative inline-flex items-center justify-center px-12 py-6 overflow-hidden font-headline font-black text-on-primary-container uppercase tracking-widest transition-all bg-primary-container rounded-xl shadow-[0_0_40px_rgba(183,159,255,0.3)] hover:scale-105 active:scale-95">
-                    <span className="relative">Secure Passage</span>
+                    <span className="relative">{t.form.submit}</span>
                   </button>
-                  <p className="mt-4 font-mono text-[10px] text-outline italic">By submitting, you agree to the laws of digital alchemy.</p>
+                  <p className="mt-4 font-mono text-[10px] text-outline italic">{t.form.footer}</p>
                 </div>
               </form>
             </div>
@@ -296,10 +300,10 @@ export default function App() {
         <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col items-center md:items-start gap-2">
             <div className="text-lg font-bold text-on-surface font-headline">The Lab.js</div>
-            <div className="font-headline text-xs tracking-widest uppercase text-on-surface/40">© 2024 The Lab.js. Alchemy in Code.</div>
+            <div className="font-headline text-xs tracking-widest uppercase text-on-surface/40">© 2024 The Lab.js. {t.footer.tagline}</div>
           </div>
           <div className="flex gap-8">
-            {["Syllabus", "Privacy", "Terms", "Changelog"].map((link) => (
+            {t.footer.links.map((link) => (
               <a key={link} className="font-headline text-xs tracking-widest uppercase text-on-surface/40 hover:text-primary transition-colors nav-link-effect" href="#">{link}</a>
             ))}
           </div>
@@ -316,3 +320,4 @@ export default function App() {
     </div>
   );
 }
+
