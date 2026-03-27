@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-headline: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-primary: #b79fff;
+  --color-primary-dim: #a88bff;
+  --color-primary-container: #ab8eff;
+  --color-on-primary-container: #290070;
+  --color-surface: #0e0e10;
+  --color-surface-container: #19191c;
+  --color-surface-container-low: #131315;
+  --color-surface-container-high: #1f1f22;
+  --color-on-surface: #f9f5f8;
+  --color-on-surface-variant: #adaaad;
+  --color-outline: #767577;
+  --color-outline-variant: #48474a;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-body;
+    background-image: radial-gradient(circle at 20% 30%, rgba(157, 123, 255, 0.05) 0%, transparent 40%),
+                      radial-gradient(circle at 80% 70%, rgba(183, 159, 255, 0.08) 0%, transparent 40%);
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-surface-container/60 backdrop-blur-xl border border-primary/15;
+  }
+
+  .glow-text {
+    text-shadow: 0 0 20px rgba(183, 159, 255, 0.4);
+  }
+
+  .polaroid-frame {
+    @apply bg-surface-container p-3 pb-10 shadow-2xl border border-outline-variant/20;
+  }
+
+  .nav-link-effect {
+    @apply relative transition-colors duration-300;
+  }
+
+  .nav-link-effect::after {
+    content: '';
+    @apply absolute -bottom-0.5 left-0 w-0 h-px bg-current transition-all duration-300;
+  }
+
+  .nav-link-effect:hover::after {
+    @apply w-full;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--rotate, 0deg)); }
+  50% { transform: translateY(-10px) rotate(var(--rotate, 0deg)); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(183, 159, 255, 0.4); }
+  50% { box-shadow: 0 0 40px rgba(183, 159, 255, 0.7); }
+}
+
+.glow-pulse {
+  animation: pulse-glow 3s infinite;
+}
