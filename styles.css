@@ -1,0 +1,112 @@
+/* Custom Styles for The Lab.js */
+
+:root {
+    --primary: #9d7bff;
+    --primary-dim: #b79fff;
+    --surface: #1c1b1f;
+    --on-surface: #e6e1e5;
+}
+
+/* Glassmorphism Effect */
+.glass-card {
+    background: rgba(43, 41, 48, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(157, 123, 255, 0.1);
+}
+
+/* Polaroid Frame */
+.polaroid-frame {
+    background: white;
+    padding: 12px 12px 24px 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: rotate(0deg) !important; /* Reset rotation on mobile/tablet */
+}
+
+@media (min-width: 1024px) {
+    .polaroid-frame.rotate-n2 { transform: rotate(-2deg) !important; }
+    .polaroid-frame.rotate-p3 { transform: rotate(3deg) !important; }
+    .polaroid-frame.rotate-n1 { transform: rotate(-1deg) !important; }
+    .polaroid-frame.rotate-p6 { transform: rotate(6deg) !important; }
+}
+
+.polaroid-frame img {
+    filter: grayscale(100%);
+    transition: filter 0.7s ease;
+}
+
+.polaroid-frame:hover img {
+    filter: grayscale(0%);
+}
+
+/* Typography Effects */
+.glow-text {
+    text-shadow: 0 0 20px rgba(157, 123, 255, 0.3);
+}
+
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(183, 159, 255, 0.4); }
+    50% { box-shadow: 0 0 50px rgba(183, 159, 255, 0.6); }
+}
+
+.glow-pulse {
+    animation: glow-pulse 3s infinite ease-in-out;
+}
+
+/* Floating Animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(var(--tw-rotate)); }
+    50% { transform: translateY(-10px) rotate(var(--tw-rotate)); }
+}
+
+.animate-float {
+    animation: float 6s infinite ease-in-out;
+}
+
+/* Nav Link Hover Effect */
+.nav-link-effect {
+    position: relative;
+}
+
+.nav-link-effect::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+.nav-link-effect:hover::after {
+    width: 100%;
+}
+
+/* Scroll Reveal Animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Custom Scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Responsive adjustments for Polaroid grid */
+@media (min-width: 1024px) {
+    .lg\:mt-20 { margin-top: 5rem; }
+    .lg\:mt-12 { margin-top: 3rem; }
+    .lg\:-mt-12 { margin-top: -3rem; }
+}
