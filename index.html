@@ -205,34 +205,50 @@
                             Application for Alchemy Cohort Alpha
                         </div>
                     </div>
-                    <form class="space-y-6 md:space-y-8" onsubmit="event.preventDefault()">
+                    <form id="lab-form" class="space-y-6 md:space-y-8" action="https://formspree.io/f/mvzvzdgo" method="POST">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                             <div class="space-y-2">
                                 <label class="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest" data-t="form.nameLabel">Alchemist Name</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-mono placeholder:text-outline-variant/50 transition-all text-sm md:text-base" placeholder="EX: ARIC_VOLLMER" type="text" id="input-name">
+                                <input name="name" class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-mono placeholder:text-outline-variant/50 transition-all text-sm md:text-base" placeholder="EX: ARIC_VOLLMER" type="text" id="input-name" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest" data-t="form.emailLabel">Signal Channel (Email)</label>
-                                <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-mono placeholder:text-outline-variant/50 transition-all text-sm md:text-base" placeholder="CODE@THELAB.JS" type="email" id="input-email">
+                                <input name="email" class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-mono placeholder:text-outline-variant/50 transition-all text-sm md:text-base" placeholder="CODE@THELAB.JS" type="email" id="input-email" required>
                             </div>
                         </div>
                         <div class="space-y-2">
                             <label class="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest" data-t="form.expLabel">Experience Index</label>
+                            <input type="hidden" name="experience" id="input-experience" value="Initiate">
                             <div class="flex gap-3 md:gap-4 overflow-x-auto pb-2 scrollbar-hide" id="exp-levels">
                                 <!-- Levels injected via JS -->
                             </div>
                         </div>
                         <div class="space-y-2">
                             <label class="font-mono text-[10px] uppercase text-outline ml-1 tracking-widest" data-t="form.intentLabel">Manifesto / Intent</label>
-                            <textarea class="w-full bg-transparent border border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-mono placeholder:text-outline-variant/50 transition-all p-4 text-sm md:text-base" placeholder="DESCRIBE YOUR DIGITAL AMBITIONS..." rows="3" id="input-intent"></textarea>
+                            <textarea name="intent" class="w-full bg-transparent border border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-mono placeholder:text-outline-variant/50 transition-all p-4 text-sm md:text-base" placeholder="DESCRIBE YOUR DIGITAL AMBITIONS..." rows="3" id="input-intent" required></textarea>
                         </div>
                         <div class="pt-4 md:pt-8 text-center">
-                            <button class="w-full sm:w-auto group relative inline-flex items-center justify-center px-12 py-6 overflow-hidden font-headline font-black text-on-primary-container uppercase tracking-widest transition-all bg-primary-container rounded-xl shadow-[0_0_40px_rgba(183,159,255,0.3)] hover:scale-105 active:scale-95">
+                            <button type="submit" id="submit-btn" class="w-full sm:w-auto group relative inline-flex items-center justify-center px-12 py-6 overflow-hidden font-headline font-black text-on-primary-container uppercase tracking-widest transition-all bg-primary-container rounded-xl shadow-[0_0_40px_rgba(183,159,255,0.3)] hover:scale-105 active:scale-95">
                                 <span class="relative" data-t="form.submit">Secure Passage</span>
                             </button>
+                            <div id="form-status" class="mt-4 font-mono text-xs hidden"></div>
                             <p class="mt-4 font-mono text-[10px] text-outline italic" data-t="form.footer">By submitting, you agree to the laws of digital alchemy.</p>
                         </div>
                     </form>
+
+                    <!-- Success State -->
+                    <div id="form-success" class="hidden flex flex-col items-center justify-center py-12 text-center space-y-6 animate-in fade-in zoom-in duration-500">
+                        <div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center border border-primary/40 shadow-[0_0_40px_rgba(157,123,255,0.2)]">
+                            <i data-lucide="check-circle" class="w-10 h-10 text-primary"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-3xl font-headline font-black text-on-surface uppercase tracking-tighter" data-t="form.successTitle">Signal Received</h3>
+                            <p class="text-on-surface-variant font-light max-w-xs mx-auto" data-t="form.successDesc">Your manifesto has been transmuted into the digital sanctum. We will reach out via your signal channel soon.</p>
+                        </div>
+                        <button id="reset-form-btn" class="px-8 py-3 border border-primary/30 text-primary rounded-xl font-headline font-bold uppercase tracking-widest text-xs hover:bg-primary/5 transition-all active:scale-95" data-t="form.successCta">
+                            Return to Lab
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>

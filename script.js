@@ -61,6 +61,9 @@ const translations = {
             intentLabel: "Manifesto / Intent",
             intentPlaceholder: "DESCRIBE YOUR DIGITAL AMBITIONS...",
             submit: "Secure Passage",
+            successTitle: "Signal Received",
+            successDesc: "Your manifesto has been transmuted into the digital sanctum. We will reach out via your signal channel soon.",
+            successCta: "Return to Lab",
             footer: "By submitting, you agree to the laws of digital alchemy.",
         },
         footer: {
@@ -128,6 +131,9 @@ const translations = {
             intentLabel: "Манифест / Намерения",
             intentPlaceholder: "ОПИШИТЕ ВАШИ ЦИФРОВЫЕ АМБИЦИИ...",
             submit: "Получить Доступ",
+            successTitle: "Сигнал Получен",
+            successDesc: "Ваш манифест был передан в цифровое святилище. Мы свяжемся с вами в ближайшее время.",
+            successCta: "Вернуться в Лабораторию",
             footer: "Отправляя заявку, вы соглашаетесь с законами цифровой алхимии.",
         },
         footer: {
@@ -178,13 +184,19 @@ function updateContent() {
 
     // Re-inject Experience Levels
     const expLevelsContainer = document.getElementById('exp-levels');
-    if (expLevelsContainer) {
+    const expInput = document.getElementById('input-experience');
+    if (expLevelsContainer && expInput) {
         expLevelsContainer.innerHTML = '';
         t.form.expLevels.forEach((level, idx) => {
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.className = `flex-shrink-0 px-4 py-2 border text-[10px] md:text-xs font-mono uppercase transition-all ${idx === 1 ? "bg-primary-container/20 border-primary text-primary" : "bg-surface-container-high border-outline-variant text-on-surface-variant hover:border-primary/50"}`;
+            const isActive = expInput.value === level;
+            btn.className = `flex-shrink-0 px-4 py-2 border text-[10px] md:text-xs font-mono uppercase transition-all ${isActive ? "bg-primary-container/20 border-primary text-primary" : "bg-surface-container-high border-outline-variant text-on-surface-variant hover:border-primary/50"}`;
             btn.textContent = level;
+            btn.addEventListener('click', () => {
+                expInput.value = level;
+                updateContent(); // Refresh to show active state
+            });
             expLevelsContainer.appendChild(btn);
         });
     }
@@ -226,6 +238,68 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => {
     revealObserver.observe(el);
 });
+
+// Form Submission Handler
+const labForm = document.getElementById('lab-form');
+const formSuccess = document.getElementById('form-success');
+const formStatus = document.getElementById('form-status');
+const submitBtn = document.getElementById('submit-btn');
+const resetFormBtn = document.getElementById('reset-form-btn');
+
+if (labForm) {
+    labForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const data = new FormData(labForm);
+        const submitText = submitBtn.querySelector('span');
+        const originalText = submitText.textContent;
+        
+        // Loading state
+        submitBtn.disabled = true;
+        submitText.textContent = currentLang === 'en' ? 'Transmuting...' : 'Превращение...';
+        formStatus.classList.remove('hidden', 'text-red-400', 'text-green-400');
+        formStatus.classList.add('text-primary');
+        formStatus.textContent = currentLang === 'en' ? 'Sending signal to the sanctum...' : 'Отправка сигнала в святилище...';
+
+        try {
+            const response = await fetch(labForm.action, {
+                method: labForm.method,
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Show Success State
+                labForm.classList.add('hidden');
+                formSuccess.classList.remove('hidden');
+                formStatus.classList.add('hidden');
+                
+                labForm.reset();
+                document.getElementById('input-experience').value = 'Initiate';
+                updateContent();
+            } else {
+                const result = await response.json();
+                throw new Error(result.errors ? result.errors.map(e => e.message).join(", ") : "Submission failed");
+            }
+        } catch (error) {
+            formStatus.classList.replace('text-primary', 'text-red-400');
+            formStatus.textContent = currentLang === 'en' ? 'Error: Connection failed. Try again.' : 'Ошибка: Соединение прервано. Попробуйте снова.';
+            console.error(error);
+        } finally {
+            submitBtn.disabled = false;
+            submitText.textContent = originalText;
+        }
+    });
+}
+
+if (resetFormBtn) {
+    resetFormBtn.addEventListener('click', () => {
+        formSuccess.classList.add('hidden');
+        labForm.classList.remove('hidden');
+    });
+}
 
 // Initial Load
 document.addEventListener('DOMContentLoaded', () => {
